@@ -1,11 +1,12 @@
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 const Twilio = require('twilio');
 
-exports.handler = TokenValidator(async function(context, event, callback) {
+exports.handler = TokenValidator(async function (context, event, callback) {
   const {
     ACCOUNT_SID,
     AUTH_TOKEN,
-    DOMAIN_NAME
+    DOMAIN_NAME,
+    SEDRIC_API_VOICE
   } = context;
 
   const client = Twilio(ACCOUNT_SID, AUTH_TOKEN);
@@ -29,7 +30,9 @@ exports.handler = TokenValidator(async function(context, event, callback) {
     const recording = await client.calls(callSid)
       .recordings
       .create({
-        recordingChannels: 'dual'
+        recordingChannels: 'dual',
+        recordingStatusCallback: SEDRIC_API_VOICE,
+        recordingStatusCallbackEvent: ['completed']
       });
     response.appendHeader('Content-Type', 'application/json');
     response.setBody({
