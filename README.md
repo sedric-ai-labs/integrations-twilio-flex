@@ -1,34 +1,42 @@
 # Sedric Twilio Flex Integration
 
 ## Introduction
-This integration is based on the following [Twilio project](https://github.com/twilio-professional-services/flex-dual-channel-recording). It describes
+This integration is based on the following [Twilio project](https://github.com/twilio-professional-services/flex-dual-channel-recording) which describes
 the various options to integrate Twilio with external systems. 
 
+The architecture consists of 3 components:
+1. Flex Plugin.
+1. Flex Serverless Function. 
+1. Sedric Public API.
+
+The *Flex plugin* is enabled in the web browser and it calls the *Flex Serverless Function* as soon as a call is completed. The function in turn registers a webhook on a *recording completed event* to send an API call to sedric public API.
+
 ## Requirements
-* Twilio Flex only support Google Chrome browsers.
+* Twilio Flex only supports Google Chrome browsers.
 * Customers should remove extensions that interfe with the execution of the function (e.g. add blockers)
+* You should have the latest version of [node](https://nodejs.org/en/download/) installed. 
 ## Account Setup
 
 1. Generate a Secondary Auth key. Also note the `Account SID`. ![example](./docs/account_config.png)
 
-1. Require [authetication](https://support.twilio.com/hc/en-us/articles/223183748-Prevent-Unauthorized-Access-to-Your-Media-with-HTTP-Basic-Auth) for every request for a media asset. ![](./docs/account_config_enable_auth_on_recording.png)
+1. Require [authetication](https://support.twilio.com/hc/en-us/articles/223183748-Prevent-Unauthorized-Access-to-Your-Media-with-HTTP-Basic-Auth) for every request for a media asset. This will prevent your recordings to be publicly available. ![](./docs/account_config_enable_auth_on_recording.png)
 ## Installation
 
 1. Create an `.env` file containing [the account configuration](https://www.twilio.com/docs/twilio-cli/general-usage#want-to-use-environment-variables-instead-of-creating-a-profile) and `source` it.
 
-1. Instal the **Twilio CLI** and additional **plugins**.
+1. Install the **Twilio CLI** and additional **plugins**.
     1. [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart)
     1. [Serverless Toolkit plugin for Twilio CLI](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit)
     1. [Flex CLI Plugin](https://www.twilio.com/docs/flex/developer/plugins/cli/install)
     1. [Twilio Serverless plugin](https://www.twilio.com/docs/twilio-cli/plugins#available-plugins)
   
-1. Install the **serverless function**.
+1. Deploy the **serverless function**.
     1. Navigate to the `dual-channel-rec-serverless` folder in this repository.
     2. Run `npm i` to install all node.js package dependencies
     3. From your terminal again, run `twilio serverless:deploy` to deploy the functions to your Twilio Flex project.
-    4. Once the deployment is completed, note the Domain in the Deployment Details shown in the terminal. This will be used in the Flex Plugin `.env` environment variable file.
+    4. Once the deployment is completed, note the `Domain` in the Deployment Details shown in the terminal. This will be used in the Flex Plugin `.env` environment variable file.
 
-1. Install the **Flex plugin**
+1. Deploy the **Flex plugin**.
     1. Navigate to the `plugin-dual-channel-recording` folder in this repository.
     2. Run `npm i` to install all node.js package dependencies
     3. In the root directory populate the `.env` file `REACT_APP_SERVERLESS_DOMAIN=` variable with the Twilio Serverless Domain noted from the Twilio Function deployment.
