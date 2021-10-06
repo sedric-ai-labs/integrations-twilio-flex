@@ -66,4 +66,4 @@ The *Flex plugin* is enabled in the web browser and it calls the *Flex Serverles
 ## Additional Information
 
 1. Recording comes with no additional costs.
-
+2. There is also an [encryption option](https://www.twilio.com/docs/voice/tutorials/voice-recording-encryption) which comes with additional costs of $.015 for each encrypted recording minute.
