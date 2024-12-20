@@ -1,0 +1,11 @@
+name: PR Description Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches: [ master ]
+
+jobs:
+  check-pr-description:
+    uses: sedric-ai-labs/shared-resources/.github/workflows/pr-description-check.yml@master
+    secrets: inherit
